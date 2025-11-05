@@ -22,5 +22,11 @@
     "lint": "bun run -F='./packages/*' lint",
     "lint:fix": "bun run -F='./packages/*' lint:fix",
     "typecheck": "bun run -F='./packages/*' typecheck"
+  },
+  "devDependencies": {
+    "simple-git-hooks": "^2.13.1",
+  },
+  "simple-git-hooks": {
+    "pre-commit": "bun run lint && bun run typecheck"
   }
 }

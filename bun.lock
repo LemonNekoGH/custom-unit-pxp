@@ -3,15 +3,16 @@
   "workspaces": {
     "": {
       "name": "postcss-plugin-pxp",
+      "devDependencies": {
+        "simple-git-hooks": "^2.13.1",
+      },
     },
     "packages/postcss-plugin-pxp": {
       "name": "@lemonneko/postcss-plugin-pxp",
-      "version": "0.0.8",
-      "dependencies": {
-        "@lemonneko/pxp-transformer": "workspace:*",
-      },
+      "version": "0.0.10",
       "devDependencies": {
         "@antfu/eslint-config": "catalog:",
+        "@lemonneko/pxp-transformer": "workspace:*",
         "@types/bun": "catalog:",
         "eslint": "catalog:",
       },
@@ -23,7 +24,7 @@
     },
     "packages/pxp-transformer": {
       "name": "@lemonneko/pxp-transformer",
-      "version": "0.0.8",
+      "version": "0.0.10",
       "dependencies": {
         "postcss-value-parser": "catalog:",
       },
@@ -37,18 +38,16 @@
     },
     "packages/vue-plugin-pxp": {
       "name": "@lemonneko/vue-plugin-pxp",
-      "version": "0.0.8",
-      "dependencies": {
-        "@lemonneko/pxp-transformer": "workspace:*",
-      },
+      "version": "0.0.10",
       "devDependencies": {
-        "@antfu/eslint-config": "^5.2.1",
-        "@types/bun": "^1.3.1",
-        "eslint": "^9.34.0",
+        "@antfu/eslint-config": "catalog:",
+        "@lemonneko/pxp-transformer": "workspace:*",
+        "@types/bun": "catalog:",
+        "eslint": "catalog:",
       },
       "peerDependencies": {
-        "postcss-value-parser": "^4.2.0",
-        "typescript": "^5",
+        "postcss-value-parser": "catalog:",
+        "typescript": "catalog:",
         "vue": "^3",
       },
     },
@@ -608,6 +607,8 @@
     "shebang-command": ["shebang-command@2.0.0", "", { "dependencies": { "shebang-regex": "^3.0.0" } }, "sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA=="],
 
     "shebang-regex": ["shebang-regex@3.0.0", "", {}, "sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A=="],
+
+    "simple-git-hooks": ["simple-git-hooks@2.13.1", "", { "bin": { "simple-git-hooks": "cli.js" } }, "sha512-WszCLXwT4h2k1ufIXAgsbiTOazqqevFCIncOuUBZJ91DdvWcC5+OFkluWRQPrcuSYd8fjq+o2y1QfWqYMoAToQ=="],
 
     "sisteransi": ["sisteransi@1.0.5", "", {}, "sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg=="],
 
