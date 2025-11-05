@@ -2,7 +2,7 @@
   "name": "@lemonneko/pxp-transformer",
   "private": true,
   "type": "module",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "LemonnekoGH",
   "exports": {
     ".": "./src/index.ts"
