@@ -19,6 +19,15 @@ jobs:
       - name: Lint
         run: bun run lint
 
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+      - name: Test
+        run: bun test
+
   build-test:
     name: Build Test
     runs-on: ubuntu-latest

@@ -43,8 +43,8 @@
     "vue": "^3"
   },
   "devDependencies": {
-    "@lemonneko/pxp-transformer": "workspace:*",
     "@antfu/eslint-config": "catalog:",
+    "@lemonneko/pxp-transformer": "workspace:*",
     "@types/bun": "catalog:",
     "eslint": "catalog:"
   },
