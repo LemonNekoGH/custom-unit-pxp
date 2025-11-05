@@ -38,9 +38,9 @@
     "typecheck": "bun --bun tsc --noEmit"
   },
   "peerDependencies": {
-    "typescript": "catalog:",
     "postcss": "^8.5.6",
-    "postcss-value-parser": "catalog:"
+    "postcss-value-parser": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
     "@lemonneko/pxp-transformer": "workspace:*"

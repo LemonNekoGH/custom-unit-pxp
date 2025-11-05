@@ -38,8 +38,8 @@
     "typecheck": "bun --bun tsc --noEmit"
   },
   "peerDependencies": {
-    "typescript": "catalog:",
     "postcss-value-parser": "catalog:",
+    "typescript": "catalog:",
     "vue": "^3"
   },
   "dependencies": {
