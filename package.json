@@ -1,13 +1,14 @@
 {
   "name": "custom-unit-pxp-root",
   "private": true,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "build": "bun run -F='./packages/*' build",
     "publish:run": "bun run -F='./packages/*' publish:run",
-    "publish:dry-run": "bun run -F='./packages/*' publish:dry-run"
+    "publish:dry-run": "bun run -F='./packages/*' publish:dry-run",
+    "bump": "npx bumpp --no-push -r"
   }
 }
