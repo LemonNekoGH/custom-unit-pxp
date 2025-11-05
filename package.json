@@ -1,50 +1,12 @@
 {
-  "name": "@lemonneko/postcss-plugin-pxp",
+  "name": "custom-unit-pxp-root",
+  "private": true,
   "version": "0.0.3",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "author": "LemonnekoGH",
-  "keywords": [
-    "postcss",
-    "postcss-plugin",
-    "postcss-plugin-pxp",
+  "workspaces": [
+    "packages/*"
   ],
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/LemonnekoGH/postcss-plugin-pxp.git"
-  },
-  "homepage": "https://github.com/LemonnekoGH/postcss-plugin-pxp",
-  "bugs": {
-    "url": "https://github.com/LemonnekoGH/postcss-plugin-pxp/issues"
-  },
-  "type": "module",
   "scripts": {
-    "build": "bun build src/index.ts --format=esm --outdir dist && bun --bun tsc",
-    "prepublishOnly": "bun run build"
-  },
-  "files": [
-    "dist"
-  ],
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@antfu/eslint-config": "^5.2.1",
-    "eslint": "^9.34.0",
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "dependencies": {
-    "postcss": "^8.5.6",
-    "postcss-value-parser": "^4.2.0"
-  },
-  "publishConfig": {
-    "access": "public"
+    "build": "bun run build --filter=packages/*",
+    "publish": "bun run publish --filter=packages/*"
   }
 }
