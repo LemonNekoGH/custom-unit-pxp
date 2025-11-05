@@ -1,0 +1,26 @@
+{
+  "name": "@lemonneko/pxp-transformer",
+  "private": true,
+  "type": "module",
+  "version": "0.0.8",
+  "author": "LemonnekoGH",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "bun build.ts && bun --bun tsc",
+    "lint": "bun --bun eslint .",
+    "lint:fix": "bun --bun eslint . --fix",
+    "typecheck": "bun --bun tsc --noEmit"
+  },
+  "peerDependencies": {
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "postcss-value-parser": "catalog:"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:",
+    "eslint": "catalog:"
+  }
+}

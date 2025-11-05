@@ -1,5 +1,5 @@
 {
-  "name": "@lemonneko/postcss-plugin-pxp",
+  "name": "@lemonneko/vue-plugin-pxp",
   "type": "module",
   "version": "0.0.8",
   "author": "LemonnekoGH",
@@ -13,9 +13,9 @@
     "url": "https://github.com/LemonnekoGH/custom-unit-pxp/issues"
   },
   "keywords": [
-    "postcss",
-    "postcss-plugin",
-    "postcss-plugin-pxp"
+    "vue",
+    "vue-plugin",
+    "vue-plugin-pxp"
   ],
   "exports": {
     ".": {
@@ -39,8 +39,8 @@
   },
   "peerDependencies": {
     "typescript": "catalog:",
-    "postcss": "^8.5.6",
-    "postcss-value-parser": "catalog:"
+    "postcss-value-parser": "catalog:",
+    "vue": "^3"
   },
   "dependencies": {
     "@lemonneko/pxp-transformer": "workspace:*"
