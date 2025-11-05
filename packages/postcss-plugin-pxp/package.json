@@ -27,7 +27,9 @@
   "type": "module",
   "scripts": {
     "build": "bun build src/index.ts --format=esm --outdir dist && bun --bun tsc",
-    "prepublishOnly": "bun run build"
+    "prepublishOnly": "bun run build",
+    "publish:run": "bun publish",
+    "publish:dry-run": "bun publish --dry-run"
   },
   "files": [
     "dist"

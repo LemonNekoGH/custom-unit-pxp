@@ -6,7 +6,8 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "bun run build --filter=packages/*",
-    "publish": "bun run publish --filter=packages/*"
+    "build": "bun run -F='./packages/*' build",
+    "publish:run": "bun run -F='./packages/*' publish:run",
+    "publish:dry-run": "bun run -F='./packages/*' publish:dry-run"
   }
 }
