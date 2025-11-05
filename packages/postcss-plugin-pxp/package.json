@@ -1,7 +1,7 @@
 {
   "name": "@lemonneko/postcss-plugin-pxp",
   "type": "module",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "LemonnekoGH",
   "license": "MIT",
   "homepage": "https://github.com/LemonnekoGH/postcss-plugin-pxp",
