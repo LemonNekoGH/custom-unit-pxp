@@ -42,10 +42,8 @@
     "postcss-value-parser": "catalog:",
     "typescript": "catalog:"
   },
-  "dependencies": {
-    "@lemonneko/pxp-transformer": "workspace:*"
-  },
   "devDependencies": {
+    "@lemonneko/pxp-transformer": "workspace:*",
     "@antfu/eslint-config": "catalog:",
     "@types/bun": "catalog:",
     "eslint": "catalog:"
