@@ -1,7 +1,7 @@
 {
   "name": "custom-unit-pxp-root",
   "private": true,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "workspaces": [
     "packages/*"
   ],
@@ -9,6 +9,9 @@
     "build": "bun run -F='./packages/*' build",
     "publish:run": "bun run -F='./packages/*' publish:run",
     "publish:dry-run": "bun run -F='./packages/*' publish:dry-run",
-    "bump": "npx bumpp --no-push -r"
+    "bump": "npx bumpp --no-push -r",
+    "lint": "bun run -F='./packages/*' lint",
+    "lint:fix": "bun run -F='./packages/*' lint:fix",
+    "typecheck": "bun run -F='./packages/*' typecheck"
   }
 }

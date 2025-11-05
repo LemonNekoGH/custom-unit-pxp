@@ -9,6 +9,6 @@ Bun.build({
   splitting: true,
   external: ['postcss', 'postcss-value-parser'],
   plugins: [
-    dts()
-  ]
+    dts(),
+  ],
 })
