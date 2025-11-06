@@ -1,27 +1,27 @@
-# vue-plugin-pxp
+# vue-compiler-plugin-pxp
 
-A Vue plugin to introduce the `v-style-pxp` directive to bind inline styles with `pxp` unit and transform it, it's very useful when you have a lot of inline styles with `pxp` unit.
+A Vue compiler plugin to transform `pxp` unit to `calc` unit.
 
 ## Install
 
 This package is available on npm, so you can use any package manager that supports npm to install it.
 
 ```bash
-npm install @lemonneko/vue-plugin-pxp
+npm install @lemonneko/vue-compiler-plugin-pxp
 # or
-yarn add @lemonneko/vue-plugin-pxp
+yarn add @lemonneko/vue-compiler-plugin-pxp
 # or
-pnpm add @lemonneko/vue-plugin-pxp
+pnpm add @lemonneko/vue-compiler-plugin-pxp
 # or
-bun add @lemonneko/vue-plugin-pxp
+bun add @lemonneko/vue-compiler-plugin-pxp
 ```
 
 ## Get Started
 
-To use this plugin, you need to install it and use it in your Vue app.
+To use this plugin, just pass the plugin to the `compilerOptions` of the Vue plugin of Vite.
 
 ```ts
-import { usePxp } from '@lemonneko/vue-plugin-pxp'
+import { createPxpCompilerPlugin } from '@lemonneko/vue-compiler-plugin-pxp'
 import { createApp } from 'vue'
 
 const app = createApp({})
