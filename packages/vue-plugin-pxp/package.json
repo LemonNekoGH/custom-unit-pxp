@@ -1,7 +1,7 @@
 {
   "name": "@lemonneko/vue-plugin-pxp",
   "type": "module",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "author": "LemonnekoGH",
   "license": "MIT",
   "homepage": "https://github.com/LemonnekoGH/custom-unit-pxp",
