@@ -45,7 +45,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
     "@lemonneko/pxp-transformer": "workspace:*",
-    "@types/bun": "catalog:",
+    "bun-types": "catalog:",
     "eslint": "catalog:"
   },
   "publishConfig": {

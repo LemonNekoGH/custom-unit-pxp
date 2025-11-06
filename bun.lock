@@ -11,11 +11,11 @@
     },
     "packages/postcss-plugin-pxp": {
       "name": "@lemonneko/postcss-plugin-pxp",
-      "version": "0.0.10",
+      "version": "0.0.11",
       "devDependencies": {
         "@antfu/eslint-config": "catalog:",
         "@lemonneko/pxp-transformer": "workspace:*",
-        "@types/bun": "catalog:",
+        "bun-types": "catalog:",
         "eslint": "catalog:",
       },
       "peerDependencies": {
@@ -26,7 +26,7 @@
     },
     "packages/pxp-transformer": {
       "name": "@lemonneko/pxp-transformer",
-      "version": "0.0.10",
+      "version": "0.0.11",
       "dependencies": {
         "postcss-value-parser": "catalog:",
       },
@@ -40,12 +40,12 @@
     },
     "packages/vue-compiler-plugin-pxp": {
       "name": "@lemonneko/vue-compiler-plugin-pxp",
-      "version": "0.0.10",
+      "version": "0.0.11",
       "devDependencies": {
         "@antfu/eslint-config": "catalog:",
         "@babel/types": "^7.28.5",
         "@lemonneko/pxp-transformer": "workspace:*",
-        "@types/bun": "catalog:",
+        "bun-types": "^1.3.1",
         "eslint": "catalog:",
       },
       "peerDependencies": {
@@ -58,11 +58,11 @@
     },
     "packages/vue-plugin-pxp": {
       "name": "@lemonneko/vue-plugin-pxp",
-      "version": "0.0.10",
+      "version": "0.0.11",
       "devDependencies": {
         "@antfu/eslint-config": "catalog:",
         "@lemonneko/pxp-transformer": "workspace:*",
-        "@types/bun": "catalog:",
+        "bun-types": "catalog:",
         "eslint": "catalog:",
       },
       "peerDependencies": {
@@ -74,7 +74,7 @@
   },
   "catalog": {
     "@antfu/eslint-config": "^5.2.1",
-    "@types/bun": "^1.3.1",
+    "bun-types": "^1.3.1",
     "eslint": "^9.34.0",
     "postcss-value-parser": "^4.2.0",
     "typescript": "^5",
@@ -159,8 +159,6 @@
     "@stacksjs/gitlint": ["@stacksjs/gitlint@0.1.5", "", { "bin": { "gitlint": "dist/bin/cli.js" } }, "sha512-5nSr6PN8/cRPdIz9Cj65Dh12N9gR7BPtJzR3rnqhAgpm5q0ihjmVTTybFQqigMcYuRpt2qX4HenV7YXuFOYScw=="],
 
     "@stylistic/eslint-plugin": ["@stylistic/eslint-plugin@5.5.0", "", { "dependencies": { "@eslint-community/eslint-utils": "^4.9.0", "@typescript-eslint/types": "^8.46.1", "eslint-visitor-keys": "^4.2.1", "espree": "^10.4.0", "estraverse": "^5.3.0", "picomatch": "^4.0.3" }, "peerDependencies": { "eslint": ">=9.0.0" } }, "sha512-IeZF+8H0ns6prg4VrkhgL+yrvDXWDH2cKchrbh80ejG9dQgZWp10epHMbgRuQvgchLII/lfh6Xn3lu6+6L86Hw=="],
-
-    "@types/bun": ["@types/bun@1.3.1", "", { "dependencies": { "bun-types": "1.3.1" } }, "sha512-4jNMk2/K9YJtfqwoAa28c8wK+T7nvJFOjxI4h/7sORWcypRNxBpr+TPNaCfVWq70tLCJsqoFwcf0oI0JU/fvMQ=="],
 
     "@types/debug": ["@types/debug@4.1.12", "", { "dependencies": { "@types/ms": "*" } }, "sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ=="],
 
