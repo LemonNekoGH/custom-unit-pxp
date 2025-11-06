@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { compileTemplate } from '@vue/compiler-sfc'
-import { transformPxp } from './index'
+import { createPxpCompilerPlugin } from './index'
 
 describe('transformPxp', () => {
   it('should transform pxp to calc', () => {
@@ -9,7 +9,7 @@ describe('transformPxp', () => {
       source: `<div :style="{ width: \`\${10}pxp\`, transform: \`translateX(\${10}pxp) translateY(\${20}pxp)\` }" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -28,7 +28,7 @@ export function render(_ctx, _cache) {
       source: `<div :style="{ width: \`\${100}pxp\` }" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -41,7 +41,7 @@ export function render(_ctx, _cache) {
       source: `<div :style="{ width: \`\${100}pxp\`, height: \`\${200}pxp\`, margin: \`\${10}pxp \${20}pxp\` }" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -57,7 +57,7 @@ export function render(_ctx, _cache) {
       source: `<div :style="{ width: \`\${width * 2}pxp\` }" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -73,7 +73,7 @@ export function render(_ctx, _cache) {
       source: `<div :style="{ margin: \`\${0}pxp\` }" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -86,7 +86,7 @@ export function render(_ctx, _cache) {
       source: `<div :style="{ left: \`\${-10}pxp\` }" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -99,7 +99,7 @@ export function render(_ctx, _cache) {
       source: `<div :style="{ width: '100px', height: \`\${200}px\` }" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -114,7 +114,7 @@ export function render(_ctx, _cache) {
       source: `<div :style="{ transform: \`scale(\${1.5}) translateX(\${50}pxp) translateY(\${100}pxp)\` }" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -129,7 +129,7 @@ export function render(_ctx, _cache) {
       source: `<div><div :style="{ width: \`\${10}pxp\` }" /><div :style="{ height: \`\${20}pxp\` }" /></div>`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -143,7 +143,7 @@ export function render(_ctx, _cache) {
       source: `<div :class="\`w-\${10}pxp\`" :style="{ width: '100px' }" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -159,7 +159,7 @@ export function render(_ctx, _cache) {
       source: `<div :style="{ width: \`\${100}pxp\`, height: '200px', margin: \`\${10}pxp auto\` }" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -175,7 +175,7 @@ export function render(_ctx, _cache) {
       source: `<div :style="{}" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -189,7 +189,7 @@ export function render(_ctx, _cache) {
       source: `<div :style="styleObj" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
@@ -203,7 +203,7 @@ export function render(_ctx, _cache) {
       source: `<div :style="{ padding: \`\${baseSize * 2}pxp \${baseSize}pxp\` }" />`,
       filename: 'test.vue',
       compilerOptions: {
-        nodeTransforms: [transformPxp],
+        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
       },
     })
 
