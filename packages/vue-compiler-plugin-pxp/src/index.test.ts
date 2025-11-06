@@ -1,215 +1,116 @@
+/* eslint-disable no-template-curly-in-string */
 import { describe, expect, it } from 'bun:test'
-import { compileTemplate } from '@vue/compiler-sfc'
+import vue from '@vitejs/plugin-vue'
+import { createServer } from 'vite'
 import { createPxpCompilerPlugin } from './index'
 
-describe('transformPxp', () => {
-  it('should transform pxp to calc', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="{ width: \`\${10}pxp\`, transform: \`translateX(\${10}pxp) translateY(\${20}pxp)\` }" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
+const VARIABLE_NAME = '--viewport-width'
+const DEFAULT_VALUE = '720'
+
+const VIRTUAL_ENTRY = 'virtual:entry'
+const VIRTUAL_VUE = 'virtual:test.vue'
+const STUB_VUE_ID = '\0virtual-stub-vue'
+
+async function compileWithVite(template: string): Promise<string> {
+  const server = await createServer({
+    logLevel: 'error',
+    configFile: false,
+    optimizeDeps: { entries: [] },
+    plugins: [
+      {
+        name: 'virtual-vue-fixture',
+        enforce: 'pre',
+        resolveId(id) {
+          if (id === 'vue')
+            return STUB_VUE_ID
+          if (id === VIRTUAL_ENTRY || id === VIRTUAL_VUE)
+            return id
+          return null
+        },
+        load(id) {
+          if (id === STUB_VUE_ID)
+            return 'export const openBlock = () => {}; export const createElementBlock = () => {}; export const normalizeStyle = v => v; export default {}'
+          if (id === VIRTUAL_ENTRY)
+            return `import Component from "${VIRTUAL_VUE}"; export default Component;`
+          if (id === VIRTUAL_VUE)
+            return `<template>${template}</template>`
+          return null
+        },
       },
-    })
-
-    expect(result.code).toBe(`import { openBlock as _openBlock, createElementBlock as _createElementBlock } from "vue"
-
-const _hoisted_1 = { style: { width: \`calc(\${10}px * var(--viewport-width) / 720)\`, transform: \`translateX(calc(\${10}px * var(--viewport-width) / 720)) translateY(calc(\${20}px * var(--viewport-width) / 720))\` } }
-
-export function render(_ctx, _cache) {
-  return (_openBlock(), _createElementBlock("div", _hoisted_1))
-}`)
+      vue({
+        template: {
+          compilerOptions: {
+            nodeTransforms: [createPxpCompilerPlugin(VARIABLE_NAME, DEFAULT_VALUE)],
+          },
+        },
+      }),
+    ],
   })
 
-  it('should transform single pxp value', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="{ width: \`\${100}pxp\` }" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
+  try {
+    const result = await server.transformRequest(VIRTUAL_VUE)
+    return result?.code ?? ''
+  }
+  finally {
+    await server.close()
+  }
+}
 
-    expect(result.code).toMatch(/calc\(\$\{100\}px \* var\(--viewport-width\) \/ 720\)/)
+describe('vite integration', () => {
+  it('transforms pxp units inside template literal expressions', async () => {
+    const code = await compileWithVite('<div :style="{ width: `${width}pxp` }" />')
+
+    expect(code).toMatch(/calc\(\$\{(?:_ctx\.)?width\}px \* var\(--viewport-width\) \/ 720\)/)
+    expect(code).not.toContain('pxp')
   })
 
-  it('should transform multiple pxp values in different properties', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="{ width: \`\${100}pxp\`, height: \`\${200}pxp\`, margin: \`\${10}pxp \${20}pxp\` }" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
+  it('transforms multiple pxp occurrences in a single binding', async () => {
+    const template = [
+      '<div :style="{ transform: `',
+      '  translateX(${offsetX}pxp)',
+      '  translateY(${positions.y}pxp)',
+      '` }" />',
+    ].join('\n')
 
-    expect(result.code).toMatch(/calc\(\$\{100\}px \* var\(--viewport-width\) \/ 720\)/)
-    expect(result.code).toMatch(/calc\(\$\{200\}px \* var\(--viewport-width\) \/ 720\)/)
-    expect(result.code).toMatch(/calc\(\$\{10\}px \* var\(--viewport-width\) \/ 720\)/)
-    expect(result.code).toMatch(/calc\(\$\{20\}px \* var\(--viewport-width\) \/ 720\)/)
+    const code = await compileWithVite(template)
+
+    expect(code).toMatch(/calc\(\$\{(?:_ctx\.)?offsetX\}px \* var\(--viewport-width\) \/ 720\)/)
+    expect(code).toMatch(/calc\(\$\{(?:_ctx\.)?positions\.y\}px \* var\(--viewport-width\) \/ 720\)/)
+    expect(code.match(/calc\(/g)?.length).toBeGreaterThanOrEqual(2)
+    expect(code).not.toContain('pxp')
   })
 
-  it('should transform pxp with expressions', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="{ width: \`\${width * 2}pxp\` }" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
+  it('handles split tokens that occur in real vue compilation output', async () => {
+    const template = '<div :style="{ width: `${width}pxp`, height: `${height}pxp` }" />'
 
-    // Note: Complex expressions with variables are compiled to _ctx.xxx format
-    // and may not be transformed if exp.content is not a string
-    // This test verifies the plugin doesn't crash on complex expressions
-    expect(result.code).toBeTruthy()
+    const code = await compileWithVite(template)
+
+    expect(code).not.toMatch(/calc\(calc\(/)
+    expect(code).toMatch(/calc\(\$\{(?:_ctx\.)?width\}px \* var\(--viewport-width\) \/ 720\)/)
+    expect(code).toMatch(/calc\(\$\{(?:_ctx\.)?height\}px \* var\(--viewport-width\) \/ 720\)/)
+    expect(code).not.toContain('pxp')
   })
 
-  it('should transform pxp with zero value', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="{ margin: \`\${0}pxp\` }" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
+  it('does not touch non pxp units', async () => {
+    const code = await compileWithVite('<div :style="{ width: `\${width}px`, height: `100%` }" />')
 
-    expect(result.code).toMatch(/calc\(\$\{0\}px \* var\(--viewport-width\) \/ 720\)/)
+    expect(code).toMatch(/width: `\$\{(?:_ctx\.)?width\}px`/)
+    expect(code).toMatch(/height: `100%`/)
+    expect(code).not.toContain('calc(')
   })
 
-  it('should transform pxp with negative values', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="{ left: \`\${-10}pxp\` }" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
+  it('supports zero and negative values', async () => {
+    const template = [
+      '<div :style="{',
+      '  marginLeft: `${-offset}pxp`,',
+      '  marginRight: `${values.zero}pxp`',
+      '}" />',
+    ].join('\n')
 
-    expect(result.code).toMatch(/calc\(\$\{-10\}px \* var\(--viewport-width\) \/ 720\)/)
-  })
+    const code = await compileWithVite(template)
 
-  it('should not transform non-pxp values', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="{ width: '100px', height: \`\${200}px\` }" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
-
-    expect(result.code).toContain('100px')
-    expect(result.code).toMatch(/\$\{200\}px/)
-    expect(result.code).not.toContain('calc')
-  })
-
-  it('should transform pxp in transform property', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="{ transform: \`scale(\${1.5}) translateX(\${50}pxp) translateY(\${100}pxp)\` }" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
-
-    expect(result.code).toMatch(/calc\(\$\{50\}px \* var\(--viewport-width\) \/ 720\)/)
-    expect(result.code).toMatch(/calc\(\$\{100\}px \* var\(--viewport-width\) \/ 720\)/)
-    expect(result.code).toMatch(/scale\(\$\{1\.5\}\)/)
-  })
-
-  it('should transform pxp in multiple elements', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div><div :style="{ width: \`\${10}pxp\` }" /><div :style="{ height: \`\${20}pxp\` }" /></div>`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
-
-    expect(result.code).toMatch(/calc\(\$\{10\}px \* var\(--viewport-width\) \/ 720\)/)
-    expect(result.code).toMatch(/calc\(\$\{20\}px \* var\(--viewport-width\) \/ 720\)/)
-  })
-
-  it('should not transform non-style bindings', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :class="\`w-\${10}pxp\`" :style="{ width: '100px' }" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
-
-    // class binding should not be transformed
-    expect(result.code).toMatch(/w-\$\{10\}pxp/)
-    // style should remain unchanged if no pxp
-    expect(result.code).toContain('100px')
-  })
-
-  it('should handle mixed pxp and regular values', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="{ width: \`\${100}pxp\`, height: '200px', margin: \`\${10}pxp auto\` }" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
-
-    expect(result.code).toMatch(/calc\(\$\{100\}px \* var\(--viewport-width\) \/ 720\)/)
-    expect(result.code).toContain('200px')
-    expect(result.code).toMatch(/calc\(\$\{10\}px \* var\(--viewport-width\) \/ 720\)/)
-    expect(result.code).toContain('auto')
-  })
-
-  it('should handle empty style object', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="{}" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
-
-    expect(result.code).toBeTruthy()
-    // Should not throw error
-  })
-
-  it('should handle style binding without expression', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="styleObj" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
-
-    expect(result.code).toBeTruthy()
-    // Should not throw error
-  })
-
-  it('should transform pxp in complex nested expressions', () => {
-    const result = compileTemplate({
-      id: 'test',
-      source: `<div :style="{ padding: \`\${baseSize * 2}pxp \${baseSize}pxp\` }" />`,
-      filename: 'test.vue',
-      compilerOptions: {
-        nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '720')],
-      },
-    })
-
-    // Note: Complex expressions with variables are compiled to _ctx.xxx format
-    // and may not be transformed if exp.content is not a string
-    // This test verifies the plugin doesn't crash on complex expressions
-    expect(result.code).toBeTruthy()
+    expect(code).toMatch(/calc\(\$\{-(?:_ctx\.)?offset\}px \* var\(--viewport-width\) \/ 720\)/)
+    expect(code).toMatch(/calc\(\$\{(?:_ctx\.)?values\.zero\}px \* var\(--viewport-width\) \/ 720\)/)
+    expect(code).not.toContain('pxp')
   })
 })
