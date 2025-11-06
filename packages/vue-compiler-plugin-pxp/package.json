@@ -1,0 +1,57 @@
+{
+  "name": "@lemonneko/vue-compiler-plugin-pxp",
+  "type": "module",
+  "version": "0.0.10",
+  "author": "LemonnekoGH",
+  "license": "MIT",
+  "homepage": "https://github.com/LemonnekoGH/custom-unit-pxp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LemonnekoGH/custom-unit-pxp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LemonnekoGH/custom-unit-pxp/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue-plugin",
+    "vue-plugin-pxp"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun build.ts && bun --bun tsc",
+    "prepublishOnly": "bun run build",
+    "publish:run": "bun publish",
+    "publish:dry-run": "bun publish --dry-run",
+    "lint": "bun --bun eslint .",
+    "lint:fix": "bun --bun eslint . --fix",
+    "typecheck": "bun --bun tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@babel/generator": "^7.28.5",
+    "@vue/compiler-core": "^3.5.23",
+    "@vue/compiler-sfc": "^3.5.23",
+    "postcss-value-parser": "catalog:",
+    "typescript": "catalog:"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:",
+    "@babel/types": "^7.28.5",
+    "@lemonneko/pxp-transformer": "workspace:*",
+    "@types/bun": "catalog:",
+    "eslint": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
