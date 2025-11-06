@@ -4,5 +4,5 @@ Bun.build({
   format: 'esm',
   sourcemap: true,
   splitting: true,
-  external: ['vue', 'postcss-value-parser'],
+  external: ['@vue/compiler-core', '@vue/compiler-sfc', 'postcss-value-parser'],
 })
