@@ -22,26 +22,37 @@ To use this plugin, just pass the plugin to the `compilerOptions` of the Vue plu
 
 ```ts
 import { createPxpCompilerPlugin } from '@lemonneko/vue-compiler-plugin-pxp'
-import { createApp } from 'vue'
 
-const app = createApp({})
-app.use(usePxp('--viewport-width', '1920'))
+import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          nodeTransforms: [createPxpCompilerPlugin('--viewport-width', '1920')]
+        }
+      },
+    }),
+  ],
+})
 ```
 
-Then you can use the `v-style-pxp` directive to bind inline styles with `pxp` unit.
+Then your code will be transformed from:
 
 ```vue
 <template>
-  <div v-style-pxp="{ width: '100pxp' }" />
+  <div :style="{ width: '100pxp' }" />
 </template>
 ```
 
-Of course, you need to set the `--viewport-width` variable in your CSS.
+to this:
 
-```css
-:root {
-  --viewport-width: 1920;
-}
+```vue
+<template>
+  <div :style="{ width: 'calc(100px * var(--viewport-width) / 1920)' }" />
+</template>
 ```
 
 ## Advanced Usage

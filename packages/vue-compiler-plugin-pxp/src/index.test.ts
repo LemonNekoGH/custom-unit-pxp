@@ -92,11 +92,21 @@ describe('vite integration', () => {
   })
 
   it('does not touch non pxp units', async () => {
-    const code = await compileWithVite('<div :style="{ width: `\${width}px`, height: `100%` }" />')
+    const code = await compileWithVite('<div :style="{ width: `${width}px`, height: `100%` }" />')
 
     expect(code).toMatch(/width: `\$\{(?:_ctx\.)?width\}px`/)
     expect(code).toMatch(/height: `100%`/)
     expect(code).not.toContain('calc(')
+  })
+
+  it('should handle super complex expressions', async () => {
+    const template = '<div :style="{ width: `${(placementAreaHeight) * brickHeight + brickGap * (placementAreaHeight - 1) + brickPadding * 2}pxp`, height: `${height}pxp` }" />'
+
+    const code = await compileWithVite(template)
+
+    expect(code).toMatch(/calc\(\$\{(?:\(_ctx.placementAreaHeight\) \* _ctx.brickHeight \+ _ctx.brickGap \* \(_ctx.placementAreaHeight - 1\) \+ _ctx.brickPadding \* 2)?\}px \* var\(--viewport-width\) \/ 720\)/)
+    expect(code).toMatch(/calc\(\$\{(?:_ctx\.)?height\}px \* var\(--viewport-width\) \/ 720\)/)
+    expect(code).not.toContain('pxp')
   })
 
   it('supports zero and negative values', async () => {
